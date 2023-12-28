@@ -154,7 +154,7 @@ public class gameManager : MonoBehaviour
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
 
-            // 메치 실패시 메세지
+            // 매치 실패시 메세지
             failTxt.SetActive(true);
             Invoke("failInvoke", 0.3f);
         }

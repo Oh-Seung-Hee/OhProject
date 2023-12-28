@@ -11,6 +11,15 @@ public class card : MonoBehaviour
     public AudioClip flip;
     public AudioSource audioSource;
 
+    // 카드 색 변환
+    SpriteRenderer cardColor;
+    public GameObject clickedCard;
+
+    void Start()
+    {
+        cardColor = clickedCard.GetComponent<SpriteRenderer>();
+    }
+
     // 카드를 뒤집을 때
     public void openCard()
     {
@@ -56,8 +65,18 @@ public class card : MonoBehaviour
     // 카드를 다시 뒤집음
     void closeCardInvoke()
     {
+        // 카드 다시 뒤집음
         anim.SetBool("isOpen", false);
         transform.Find("back").gameObject.SetActive(true);
         transform.Find("front").gameObject.SetActive(false);
+
+        // 뒤집었던 카드 색 변경
+        changeColor();
+    }
+
+    // 뒤집었던 카드 색 변경
+    void changeColor()
+    {
+        cardColor.material.color = new Color(192 / 255f, 192 / 255f, 192 / 255f);
     }
 }
