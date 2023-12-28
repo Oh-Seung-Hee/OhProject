@@ -14,6 +14,10 @@ public class gameManager : MonoBehaviour
     public GameObject firstCard;
     public GameObject secondCard;
 
+    // 매치 성공 메세지
+    public GameObject successTxt;
+    public GameObject failTxt;
+
     // 타임 오브젝트
     public TMP_Text timeTxt;
     float time = 0.0f;
@@ -103,16 +107,36 @@ public class gameManager : MonoBehaviour
                 endTxt.SetActive(true);
                 Time.timeScale = 0.0f;
             }
+
+            // 매치 성공시 메세지
+            successTxt.SetActive(true);
+            Invoke("successInvoke", 0.3f);
         }
         // 카드의 그림이 같지 않으면
         else
         {
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
+
+            // 메치 실패시 메세지
+            failTxt.SetActive(true);
+            Invoke("failInvoke", 0.3f);
         }
 
         // 첫번째 카드, 두번째 카드 초기화
         firstCard = null;
         secondCard = null;
+    }
+
+    // 매치 성공 메세지 삭제
+    void successInvoke()
+    {
+        successTxt.SetActive(false);
+    }
+
+    // 매치 실패 메세지 삭제
+    void failInvoke()
+    {
+        failTxt.SetActive(false);
     }
 }
