@@ -7,9 +7,17 @@ public class card : MonoBehaviour
     // 카드 움직임
     public Animator anim;
 
+    // 카드 소리
+    public AudioClip flip;
+    public AudioSource audioSource;
+
     // 카드를 뒤집을 때
     public void openCard()
     {
+        // 카드 뒤집는 소리 출력
+        audioSource.PlayOneShot(flip);
+
+        // 카드를 뒤집었을 때
         anim.SetBool("isOpen", true);
         transform.Find("front").gameObject.SetActive(true);
         transform.Find("back").gameObject.SetActive(false);

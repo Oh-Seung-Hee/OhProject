@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\endTxt.cs" />
     <Compile Include="Assets\Scripts\card.cs" />
+    <Compile Include="Assets\Scripts\audioManager.cs" />
     <Compile Include="Assets\Scripts\gameManager.cs" />
   </ItemGroup>
   <ItemGroup>

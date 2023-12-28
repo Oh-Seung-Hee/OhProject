@@ -18,6 +18,14 @@ public class gameManager : MonoBehaviour
     public GameObject successTxt;
     public GameObject failTxt;
 
+    // 매치 사운드
+    public AudioSource audioSource;
+    public AudioClip successSound;
+    public AudioClip failSound;
+
+    // 게임 시작 사운드
+    public AudioClip startGame;
+
     // 타임 오브젝트
     public TMP_Text timeTxt;
     float time = 0.0f;
@@ -45,7 +53,11 @@ public class gameManager : MonoBehaviour
     // 게임 초기화
     void initGame()
     {
+        // 시간 흐름 초기화
         Time.timeScale = 1.0f;
+
+        // 게임 시작 사운드 출력
+        audioSource.PlayOneShot(startGame);
     }
 
     // 타이머 소수 둘째자리까지 표시
@@ -97,6 +109,10 @@ public class gameManager : MonoBehaviour
         // 첫번째 그림과 두번째 그림이 같으면
         if (firstCardImage == secondCardImage)
         {
+            // 매치 성공 사운드 출력
+            audioSource.PlayOneShot(successSound);
+
+            // 매치 성공한 카드 제거
             firstCard.GetComponent<card>().destroyCard();
             secondCard.GetComponent<card>().destroyCard();
 
@@ -115,6 +131,9 @@ public class gameManager : MonoBehaviour
         // 카드의 그림이 같지 않으면
         else
         {
+            // 매치 실패 사운드 출력
+            audioSource.PlayOneShot(failSound);
+
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
 
