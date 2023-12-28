@@ -33,8 +33,8 @@ public class gameManager : MonoBehaviour
     // 시간 경고음 사운드
     public bool isBeep = false;
 
-    // 게임 종료 텍스트
-    public GameObject endTxt;
+    // 게임 종료 팝업
+    public GameObject endPanel;
 
     void Awake()
     {
@@ -88,10 +88,22 @@ public class gameManager : MonoBehaviour
             // 타이머 경고음 정지
             isBeep = false;
 
-            // 게임 종료 텍스트 활성화
-            endTxt.SetActive(true);
-            Time.timeScale = 0.0f;
+            gameOver();
         }
+    }
+
+    // 게임 오버
+    void gameOver()
+    {
+        // 게임 종료 팝업 활성화
+        endPanel.SetActive(true);
+
+        // 시간 흐름 정지
+        Time.timeScale = 0.0f;
+
+        // 매치 성공/실패 메세지 삭제
+        successTxt.SetActive(false);
+        failTxt.SetActive(false);
     }
 
     // 카드 생성
@@ -137,8 +149,7 @@ public class gameManager : MonoBehaviour
             int cardsLeft = GameObject.Find("cards").transform.childCount;
             if (cardsLeft == 2)
             {
-                endTxt.SetActive(true);
-                Time.timeScale = 0.0f;
+                gameOver();
             }
 
             // 매치 성공시 메세지

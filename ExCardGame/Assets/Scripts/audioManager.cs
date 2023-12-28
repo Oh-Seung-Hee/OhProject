@@ -5,11 +5,10 @@ using UnityEngine;
 public class audioManager : MonoBehaviour
 {
     // 배경음악
-    public AudioClip bgmusic;
-    public AudioSource audioSource;
+    public AudioSource bgm;
 
     // 시간 경고음 사운드
-    public AudioClip timeAlarm;
+    public AudioSource beep;
 
     void Start()
     {
@@ -24,8 +23,7 @@ public class audioManager : MonoBehaviour
     // 배경음악 출력
     void bgmPlay()
     {
-        audioSource.clip = bgmusic;
-        audioSource.Play();
+        bgm.Play();
     }
 
     // 시간 경고음 사운드 출력
@@ -33,7 +31,10 @@ public class audioManager : MonoBehaviour
     {
         if (gameManager.I.isBeep)
         {
-            audioSource.PlayOneShot(timeAlarm, 0.4f);
+            if (!beep.isPlaying)
+            {
+                beep.Play();
+            }
         }
-    }
+    } 
 }
