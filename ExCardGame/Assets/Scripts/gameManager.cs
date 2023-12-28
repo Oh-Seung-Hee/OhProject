@@ -30,6 +30,9 @@ public class gameManager : MonoBehaviour
     public TMP_Text timeTxt;
     float time = 0.0f;
 
+    // 시간 경고음 사운드
+    public bool isBeep = false;
+
     // 게임 종료 텍스트
     public GameObject endTxt;
 
@@ -47,7 +50,6 @@ public class gameManager : MonoBehaviour
     void Update()
     {
         timer();
-        timeOut();
     }
 
     // 게임 초기화
@@ -63,15 +65,30 @@ public class gameManager : MonoBehaviour
     // 타이머 소수 둘째자리까지 표시
     void timer()
     {
+        // 타이머 시간 재생
         time += Time.deltaTime;
-        timeTxt.text = time.ToString("N2");
-    }
 
-    // 시간 초과 게임 오버
-    void timeOut()
-    {
-        if (time >= 30.0f)
+        // 타이머가 20초 미만일 때
+        if (time < 20.0f)
         {
+            timeTxt.text = time.ToString("N2");
+        }
+        // 타이머가 20초 이상 30초 미만일 때
+        else if (time >= 20.0f && time < 30.0f)
+        {
+            // 타이머 경고음 출력
+            isBeep = true;
+
+            // 타이머 빨간색으로 전환
+            timeTxt.text = "<color=#ff0000>" + time.ToString("N2") + "</color>";
+        }
+        // 시간 초과 게임 오버
+        else if (time >= 30.0f)
+        {
+            // 타이머 경고음 정지
+            isBeep = false;
+
+            // 게임 종료 텍스트 활성화
             endTxt.SetActive(true);
             Time.timeScale = 0.0f;
         }

@@ -163,6 +163,7 @@ MonoBehaviour:
   failSound: {fileID: 8300000, guid: 9875bae8d7d3d8a4280d1d0f759d0118, type: 3}
   startGame: {fileID: 8300000, guid: d93fee6e37fb7f94dab7b477cd2ae7b5, type: 3}
   timeTxt: {fileID: 2037358101}
+  isBeep: 0
   endTxt: {fileID: 1972040245}
 --- !u!4 &279986140
 Transform:
@@ -403,6 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmusic: {fileID: 8300000, guid: 77a547905cebdd34b83800f8a779e27d, type: 3}
   audioSource: {fileID: 390777766}
+  timeAlarm: {fileID: 8300000, guid: c72b1eabcc1b9014b905e8a75aa67c7d, type: 3}
 --- !u!4 &390777768
 Transform:
   m_ObjectHideFlags: 0
