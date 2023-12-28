@@ -23,6 +23,10 @@ public class gameManager : MonoBehaviour
     public AudioClip successSound;
     public AudioClip failSound;
 
+    // 매칭 시도 횟수 카운트
+    int matchCount = 0;
+    public TMP_Text countResult;
+
     // 게임 시작 사운드
     public AudioClip startGame;
 
@@ -104,6 +108,9 @@ public class gameManager : MonoBehaviour
         // 매치 성공/실패 메세지 삭제
         successTxt.SetActive(false);
         failTxt.SetActive(false);
+
+        // 매칭 시도 횟수 표시
+        countResult.text = "COUNT : " + matchCount.ToString();
     }
 
     // 카드 생성
@@ -173,6 +180,9 @@ public class gameManager : MonoBehaviour
         // 첫번째 카드, 두번째 카드 초기화
         firstCard = null;
         secondCard = null;
+
+        // 매칭 시도 횟수 카운트
+        matchCount++;
     }
 
     // 매치 성공 메세지 삭제
