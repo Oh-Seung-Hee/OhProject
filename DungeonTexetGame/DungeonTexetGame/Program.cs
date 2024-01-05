@@ -31,7 +31,6 @@ namespace DungeonTexetGame
     public class CItem
     {
         public string name;
-        //public string function;
         public int powerStat;
         public int defenseStat;
         public string manual;
@@ -46,7 +45,6 @@ namespace DungeonTexetGame
         public CItem(string itemName, int itemPowerStat, int itemDefenseStat, string itemManual, int itemCost, bool itemIsWear, bool itemIsHave)
         {
             name = itemName;
-            //function = itemFunction;
             powerStat = itemPowerStat;
             defenseStat = itemDefenseStat;
             manual = itemManual;
@@ -576,7 +574,7 @@ namespace DungeonTexetGame
                 if (user.gold >= shopItems[inputNum].cost)
                 {
                     user.gold -= shopItems[inputNum].cost;
-                    AddItem(userItems, shopItems[inputNum].name, /*shopItems[inputNum].function,*/ shopItems[inputNum].powerStat, shopItems[inputNum].defenseStat, shopItems[inputNum].manual, shopItems[inputNum].cost, false, true);
+                    AddItem(userItems, shopItems[inputNum].name, shopItems[inputNum].powerStat, shopItems[inputNum].defenseStat, shopItems[inputNum].manual, shopItems[inputNum].cost, false, true);
 
                     Console.WriteLine("구매를 완료했습니다.");
                 }
