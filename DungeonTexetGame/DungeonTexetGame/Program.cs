@@ -91,6 +91,9 @@ namespace DungeonTexetGame
             AddItem(shopItems, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 600, false, false);
             AddItem(shopItems, "청동 도끼", 5, 0, "어디선가 사용됐던거 같은 도끼입니다.", 1500, false, false);
             AddItem(shopItems, "스파르타의 창", 7, 0, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 100, false, false);
+            AddItem(shopItems, "모두를 홀리는 고양이", 30, 15, "모두들 고양이를 보면 홀리지!", 5000, false, false);
+            AddItem(shopItems, "너덜너덜한 망토", 0, 20, "너덜너덜해보이지만 사실은 무림고수들이 입던 망토입니다.", 3000, false, false);
+            AddItem(shopItems, "분노한 자의 고무망치", 15, 0, "층간 소음에 분노한 자의 고무망치입니다.", 2500, false, false);
         }
         #endregion // 초기화
 
@@ -133,7 +136,7 @@ namespace DungeonTexetGame
         }
 
         // 아이템 삭제
-        public void DeleteItem(List<CItem> listName, string itemName)
+        static void DeleteItem(List<CItem> listName, string itemName)
         {
             int idx = SearchItem(listName, itemName);
 
@@ -330,13 +333,15 @@ namespace DungeonTexetGame
                 Console.Write($"{listName[idx].name}\t| ");
 
                 // 공격 아이템인지 방어 아이템인지 구분
-                if (listName[idx].powerStat > listName[idx].defenseStat)
+                if (!(listName[idx].powerStat == 0))
                 {
                     Console.Write($"공격력 +{listName[idx].powerStat}\t| ");
+
                 }
-                else
+                if (!(listName[idx].defenseStat == 0))
                 {
                     Console.Write($"방어력 +{listName[idx].defenseStat}\t| ");
+
                 }
 
                 Console.WriteLine($"{listName[idx].manual}");
@@ -392,13 +397,15 @@ namespace DungeonTexetGame
                 Console.Write($"{listName[idx].name}\t| ");
 
                 // 공격 아이템인지 방어 아이템인지 구분
-                if (listName[idx].powerStat > listName[idx].defenseStat)
+                if (!(listName[idx].powerStat == 0))
                 {
                     Console.Write($"공격력 +{listName[idx].powerStat}\t| ");
+
                 }
-                else
+                if (!(listName[idx].defenseStat == 0))
                 {
                     Console.Write($"방어력 +{listName[idx].defenseStat}\t| ");
+
                 }
 
                 Console.WriteLine($"{listName[idx].manual}");
@@ -436,13 +443,14 @@ namespace DungeonTexetGame
             PrintShopItem(shopItems);
             Console.WriteLine();
             Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("2. 아이템 판매");
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
             // 메뉴 선택 확인
-            int selectMenu = CheckNum(0, 1);
+            int selectMenu = CheckNum(0, 2);
 
             switch (selectMenu)
             {
@@ -455,6 +463,11 @@ namespace DungeonTexetGame
                 case 1:
                     ReShowShop();
                     break;
+
+                // 아이템 판매
+                case 2:
+                    ShowMyInventory();
+                    break;
             }
         }
 
@@ -466,13 +479,15 @@ namespace DungeonTexetGame
                 Console.Write($"- {listName[idx].name}\t| ");
 
                 // 공격 아이템인지 방어 아이템인지 구분
-                if (listName[idx].powerStat > listName[idx].defenseStat)
+                if (!(listName[idx].powerStat == 0))
                 {
                     Console.Write($"공격력 +{listName[idx].powerStat}\t| ");
+
                 }
-                else
+                if (!(listName[idx].defenseStat == 0))
                 {
                     Console.Write($"방어력 +{listName[idx].defenseStat}\t| ");
+
                 }
 
                 Console.Write($"{listName[idx].manual}\t| ");
@@ -542,13 +557,15 @@ namespace DungeonTexetGame
                 Console.Write($"- {idx + 1} {listName[idx].name}\t| ");
 
                 // 공격 아이템인지 방어 아이템인지 구분
-                if (listName[idx].powerStat > listName[idx].defenseStat)
+                if (!(listName[idx].powerStat == 0))
                 {
                     Console.Write($"공격력 +{listName[idx].powerStat}\t| ");
+
                 }
-                else
+                if (!(listName[idx].defenseStat == 0))
                 {
                     Console.Write($"방어력 +{listName[idx].defenseStat}\t| ");
+
                 }
 
                 Console.Write($"{listName[idx].manual}\t| ");
@@ -596,6 +613,79 @@ namespace DungeonTexetGame
             Console.Write(">> ");
             int checkError = CheckNum(0, 0);
             ReShowShop();
+        }
+
+        // 3-2. 아이템 판매
+        static void ShowMyInventory()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{user.gold} G");
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+            PrintInventoryShopWithNum(userItems);
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, userItems.Count);
+
+            if (selectMenu == 0)
+            {
+                // 메뉴 실행
+                PrintMenu();
+            }
+            else
+            {
+                // 아이템 판매
+                SaleItem(selectMenu - 1);
+                ShowMyInventory();
+            }
+        }
+
+        // 인벤토리 아이템 출력
+        static void PrintInventoryShopWithNum(List<CItem> listName)
+        {
+            for (int idx = 0; idx < listName.Count; idx++)
+            {
+                Console.Write($"- {idx + 1} {listName[idx].name}\t| ");
+
+                // 공격 아이템인지 방어 아이템인지 구분
+                if (!(listName[idx].powerStat == 0))
+                {
+                    Console.Write($"공격력 +{listName[idx].powerStat}\t| ");
+
+                }
+                if (!(listName[idx].defenseStat == 0))
+                {
+                    Console.Write($"방어력 +{listName[idx].defenseStat}\t| ");
+
+                }
+
+                Console.WriteLine($"{listName[idx].manual}\t| {listName[idx].cost} G");
+            }
+        }
+
+        // 아이템 판매
+        static void SaleItem(int inputNum)
+        {
+            // 인벤토리에 있는 아이템 착용/소유 여부 초기화
+            userItems[inputNum].isHave = false;
+            userItems[inputNum].isWear = false;
+
+            // 판매 시 구매 가격의 85% 가격에 판매
+            user.gold += (int)(userItems[inputNum].cost * 0.85f);
+
+            // 인벤토리에 있는 아이템 삭제
+            DeleteItem(userItems, userItems[inputNum].name);
         }
         #endregion // 메서드
     }
