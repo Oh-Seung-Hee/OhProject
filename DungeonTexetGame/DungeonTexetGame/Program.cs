@@ -1,4 +1,5 @@
 ﻿using DungeonTexetGame;
+using System.Text;
 
 namespace DungeonTexetGame
 {
@@ -17,13 +18,13 @@ namespace DungeonTexetGame
         // User 생성자
         public CUser(string newName, string newjob, int newLv, int newPower, int newDefense, int newHealth, int newGold)
         {
-            name = newName;
-            job = newjob;
-            lv = newLv;
-            power = newPower;
-            defense = newDefense;
-            health = newHealth;
-            gold = newGold;
+            this.name = newName;
+            this.job = newjob;
+            this.lv = newLv;
+            this.power = newPower;
+            this.defense = newDefense;
+            this.health = newHealth;
+            this.gold = newGold;
         }
     }
 
@@ -35,6 +36,7 @@ namespace DungeonTexetGame
         public int defenseStat;
         public string manual;
         public int cost;
+        public string type;
 
         // 착용 여부
         public bool isWear;
@@ -42,15 +44,16 @@ namespace DungeonTexetGame
         public bool isHave;
 
         // Item 생성자
-        public CItem(string itemName, int itemPowerStat, int itemDefenseStat, string itemManual, int itemCost, bool itemIsWear, bool itemIsHave)
+        public CItem(string itemName, int itemPowerStat, int itemDefenseStat, string itemManual, int itemCost, bool itemIsWear, bool itemIsHave, string itemType)
         {
-            name = itemName;
-            powerStat = itemPowerStat;
-            defenseStat = itemDefenseStat;
-            manual = itemManual;
-            cost = itemCost;
-            isWear = itemIsWear;
-            isHave = itemIsHave;
+            this.name = itemName;
+            this.powerStat = itemPowerStat;
+            this.defenseStat = itemDefenseStat;
+            this.manual = itemManual;
+            this.cost = itemCost;
+            this.isWear = itemIsWear;
+            this.isHave = itemIsHave;
+            this.type = itemType;  
         }
     }
     #endregion // User, Item
@@ -85,15 +88,15 @@ namespace DungeonTexetGame
         // 상점 아이템 초기화
         static void SetShopItem()
         {
-            AddItem(shopItems, "수련자 갑옷", 0, 5, "수련에 도움을 주는 갑옷입니다.", 1000, false, false);
-            AddItem(shopItems, "무쇠갑옷", 0, 9, "무쇠로 만들어져 튼튼한 갑옷입니다.", 100, false, false);
-            AddItem(shopItems, "스파르타의 갑옷", 0, 15, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, false, false);
-            AddItem(shopItems, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 600, false, false);
-            AddItem(shopItems, "청동 도끼", 5, 0, "어디선가 사용됐던거 같은 도끼입니다.", 1500, false, false);
-            AddItem(shopItems, "스파르타의 창", 7, 0, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 100, false, false);
-            AddItem(shopItems, "모두를 홀리는 고양이", 30, 15, "모두들 고양이를 보면 홀리지!", 5000, false, false);
-            AddItem(shopItems, "너덜너덜한 망토", 0, 20, "너덜너덜해보이지만 사실은 무림고수들이 입던 망토입니다.", 3000, false, false);
-            AddItem(shopItems, "분노한 자의 고무망치", 15, 0, "층간 소음에 분노한 자의 고무망치입니다.", 2500, false, false);
+            AddItem(shopItems, "수련자 갑옷", 0, 5, "수련에 도움을 주는 갑옷입니다.", 1000, false, false, "방어력");
+            AddItem(shopItems, "무쇠갑옷", 0, 9, "무쇠로 만들어져 튼튼한 갑옷입니다.", 100, false, false, "방어력");
+            AddItem(shopItems, "스파르타의 갑옷", 0, 15, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, false, false, "방어력");
+            AddItem(shopItems, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 600, false, false, "공격력");
+            AddItem(shopItems, "청동 도끼", 5, 0, "어디선가 사용됐던거 같은 도끼입니다.", 1500, false, false, "공격력");
+            AddItem(shopItems, "스파르타의 창", 7, 0, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 100, false, false, "공격력");
+            AddItem(shopItems, "모두를 홀리는 고양이", 30, 15, "모두들 고양이를 보면 홀리지!", 5000, false, false, "펫");
+            AddItem(shopItems, "너덜너덜한 망토", 0, 20, "너덜너덜해보이지만 사실은 무림고수들이 입던 망토입니다.", 3000, false, false, "방어력");
+            AddItem(shopItems, "분노한 자의 고무망치", 15, 0, "층간 소음에 분노한 자의 고무망치입니다.", 2500, false, false, "공격력");
         }
         #endregion // 초기화
 
@@ -129,9 +132,9 @@ namespace DungeonTexetGame
 
         #region 아이템 관련
         // 아이템 추가
-        static void AddItem(List<CItem> listName, string itemName, int itemPowerStat, int itemDefenseStat, string itemManual, int itemCost, bool itemIsWear, bool itemIsHave)
+        static void AddItem(List<CItem> listName, string itemName, int itemPowerStat, int itemDefenseStat, string itemManual, int itemCost, bool itemIsWear, bool itemIsHave, string itemType)
         {
-            CItem item = new CItem(itemName, itemPowerStat, itemDefenseStat, itemManual, itemCost, itemIsWear, itemIsHave);
+            CItem item = new CItem(itemName, itemPowerStat, itemDefenseStat, itemManual, itemCost, itemIsWear, itemIsHave, itemType);
             listName.Add(item);
         }
 
@@ -147,7 +150,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 아이템 찾기
+        // 아이템 탐색
         static int SearchItem(List<CItem> listName, string itemName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -164,6 +167,7 @@ namespace DungeonTexetGame
         #endregion // 아이템 관련
 
         #region 메서드
+        #region 기본 메뉴
         // 0. 메뉴 출력
         static void PrintMenu()
         {
@@ -221,8 +225,10 @@ namespace DungeonTexetGame
                 Console.Write(">> ");
             }
         }
+        #endregion // 기본 메뉴
 
-        // 1. 상태 보기
+        #region 메뉴 - 상태보기
+        // 1. [메뉴] 상태 보기
         static void ShowInfo()
         {
             // 화면 초기화
@@ -275,8 +281,10 @@ namespace DungeonTexetGame
                     break;
             }
         }
+        #endregion // 메뉴 - 상태보기
 
-        // 2. 인벤토리
+        #region 메뉴 - 인벤토리
+        // 2. [메뉴] 인벤토리
         static void ShowInventory()
         {
             // 화면 초기화
@@ -317,7 +325,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 인벤토리 출력
+        // 인벤토리 목록 출력
         static void PrintInventory(List<CItem> listName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -348,7 +356,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 2-1. 장착 관리
+        // 2-1. 장착 관리 메뉴 활성화
         static void SetInventory()
         {
             // 화면 초기화
@@ -381,7 +389,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 인벤토리 출력
+        // 인벤토리 목록 출력(with. 숫자)
         static void PrintInventoryWithNum(List<CItem> listName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -423,11 +431,37 @@ namespace DungeonTexetGame
             // 장착 중이지 않다면 -> 장착
             else
             {
+                // 기존 장착 아이템 해제
+                int idx = SearchItemIsWear(userItems);
+                if (idx >= 0)
+                {
+                    if (userItems[idx].type == userItems[inputNum].type)
+                {
+                    userItems[idx].isWear = false;
+                }
+                }
+                
+                // 새 아이템 장착
                 userItems[inputNum].isWear = true;
             }
         }
 
-        // 3. 상점
+        // 장착하고 있는 아이템 탐색
+        static int SearchItemIsWear(List<CItem> listName)
+        {
+            for(int idx = 0; idx<listName.Count; idx++)
+            {
+                if (listName[idx].isWear)
+                {
+                    return idx;
+                }
+            }
+            return -1;
+        }
+        #endregion // 메뉴 - 인벤토리
+
+        #region 메뉴 - 상점 
+        // 3. [메뉴] 상점
         static void ShowShop()
         {
             // 화면 초기화
@@ -471,7 +505,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 상점 아이템 출력
+        // 상점 아이템 목록 출력
         static void PrintShopItem(List<CItem> listName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -513,7 +547,7 @@ namespace DungeonTexetGame
             return false;
         }
 
-        // 3-1. 아이템 구매
+        // 3-1. 아이템 구매 메뉴 활성화
         static void ReShowShop()
         {
             // 화면 초기화
@@ -549,7 +583,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 상점 아이템 출력
+        // 상점 아이템 목록 출력(with. 숫자)
         static void PrintShopItemWithNum(List<CItem> listName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -591,7 +625,7 @@ namespace DungeonTexetGame
                 if (user.gold >= shopItems[inputNum].cost)
                 {
                     user.gold -= shopItems[inputNum].cost;
-                    AddItem(userItems, shopItems[inputNum].name, shopItems[inputNum].powerStat, shopItems[inputNum].defenseStat, shopItems[inputNum].manual, shopItems[inputNum].cost, false, true);
+                    AddItem(userItems, shopItems[inputNum].name, shopItems[inputNum].powerStat, shopItems[inputNum].defenseStat, shopItems[inputNum].manual, shopItems[inputNum].cost, false, true, shopItems[inputNum].type);
 
                     Console.WriteLine("구매를 완료했습니다.");
                 }
@@ -615,7 +649,7 @@ namespace DungeonTexetGame
             ReShowShop();
         }
 
-        // 3-2. 아이템 판매
+        // 3-2. 아이템 판매 메뉴 활성화
         static void ShowMyInventory()
         {
             // 화면 초기화
@@ -651,7 +685,7 @@ namespace DungeonTexetGame
             }
         }
 
-        // 인벤토리 아이템 출력
+        // 인벤토리 아이템 목록 출력(with. 숫자)
         static void PrintInventoryShopWithNum(List<CItem> listName)
         {
             for (int idx = 0; idx < listName.Count; idx++)
@@ -687,6 +721,7 @@ namespace DungeonTexetGame
             // 인벤토리에 있는 아이템 삭제
             DeleteItem(userItems, userItems[inputNum].name);
         }
+        #endregion // 메뉴 - 상점
         #endregion // 메서드
     }
 }
