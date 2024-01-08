@@ -15,6 +15,10 @@ namespace DungeonTexetGame
         public int health;
         public int gold;
 
+        // 유저 추가공격력, 추가방어력
+        public int addPower;
+        public int addDefense;
+
         // User 생성자
         public CUser(string newName, string newjob, int newLv, int newPower, int newDefense, int newHealth, int newGold)
         {
@@ -53,7 +57,7 @@ namespace DungeonTexetGame
             this.cost = itemCost;
             this.isWear = itemIsWear;
             this.isHave = itemIsHave;
-            this.type = itemType;  
+            this.type = itemType;
         }
     }
     #endregion // User, Item
@@ -180,12 +184,14 @@ namespace DungeonTexetGame
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
+            Console.WriteLine("4. 던전입장");
+            Console.WriteLine("5. 휴식하기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
             // 메뉴 선택 확인
-            int selectMenu = CheckNum(1, 3);
+            int selectMenu = CheckNum(1, 5);
 
             switch (selectMenu)
             {
@@ -202,6 +208,16 @@ namespace DungeonTexetGame
                 // 상점
                 case 3:
                     ShowShop();
+                    break;
+
+                // 던전입장
+                case 4:
+                    ShowDungeon();
+                    break;
+
+                // 휴식하기
+                case 5:
+                    ShowRestArea();
                     break;
             }
         }
@@ -240,22 +256,22 @@ namespace DungeonTexetGame
             Console.WriteLine($"LV.{user.lv}");
             Console.WriteLine($"{user.name} \t( {user.job} )");
 
-            int addPower = UserPower();
-            Console.Write($"공격력 \t{user.power + addPower} ");
-            if (addPower > 0)
+            user.addPower = UserPower();
+            Console.Write($"공격력 \t{user.power + user.addPower} ");
+            if (user.addPower > 0)
             {
-                Console.WriteLine($"(+{addPower})");
+                Console.WriteLine($"(+{user.addPower})");
             }
             else
             {
                 Console.WriteLine();
             }
 
-            int addDefense = UserDefense();
-            Console.Write($"방어력 \t{user.defense + addDefense} ");
-            if (addDefense > 0)
+            user.addDefense = UserDefense();
+            Console.Write($"방어력 \t{user.defense + user.addDefense} ");
+            if (user.addDefense > 0)
             {
-                Console.WriteLine($"(+{addDefense})");
+                Console.WriteLine($"(+{user.addDefense})");
             }
             else
             {
@@ -436,11 +452,11 @@ namespace DungeonTexetGame
                 if (idx >= 0)
                 {
                     if (userItems[idx].type == userItems[inputNum].type)
-                {
-                    userItems[idx].isWear = false;
+                    {
+                        userItems[idx].isWear = false;
+                    }
                 }
-                }
-                
+
                 // 새 아이템 장착
                 userItems[inputNum].isWear = true;
             }
@@ -449,7 +465,7 @@ namespace DungeonTexetGame
         // 장착하고 있는 아이템 탐색
         static int SearchItemIsWear(List<CItem> listName)
         {
-            for(int idx = 0; idx<listName.Count; idx++)
+            for (int idx = 0; idx < listName.Count; idx++)
             {
                 if (listName[idx].isWear)
                 {
@@ -722,6 +738,314 @@ namespace DungeonTexetGame
             DeleteItem(userItems, userItems[inputNum].name);
         }
         #endregion // 메뉴 - 상점
+
+        #region 메뉴 - 던전입장
+        // 4. [메뉴] 던전입장
+        static void ShowDungeon()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            Console.WriteLine("던전입장");
+            Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("1. 쉬운 던전\t| 방어력 5 이상 권장");
+            Console.WriteLine("2. 일반 던전\t| 방어력 11 이상 권장");
+            Console.WriteLine("3. 어려운 던전\t| 방어력 17 이상 권장");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, 3);
+
+            switch (selectMenu)
+            {
+                // 나가기
+                case 0:
+                    PrintMenu();
+                    break;
+
+                // 쉬운 던전입장
+                case 1:
+                    EnterEasyDungeon();
+                    break;
+
+                // 일반 던전입장
+                case 2:
+                    EnterNormalDungeon();
+                    break;
+
+                // 어려운 던전입장
+                case 3:
+                    EnterHardDungeon();
+                    break;
+            }
+        }
+
+        // 4-1. 쉬운 던전입장 메뉴 활성화
+        static void EnterEasyDungeon()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            // 던전 클리어 여부 확인
+            bool isWin = false;
+
+            // 숫자 랜덤 생성
+            Random random = new Random();
+            int rand = random.Next(1, 10);
+
+            // 유저의 방어력이 권장 방어력보다 높을 때 + 작지만 60%의 확률로 이겼을 때
+            if (user.defense + user.addDefense >= 5 || rand > 4)
+            {
+                Console.WriteLine("던전 클리어");
+                Console.WriteLine("축하합니다!");
+                Console.WriteLine("쉬운 던전을 클리어 하였습니다.");
+                Console.WriteLine();
+
+                isWin = true;
+            }
+            // 유저의 방어력이 권장 방어력보다 작을 때, 40%의 확률로 던전 실패
+            else
+            {
+                Console.WriteLine("던전 실패!");
+                Console.WriteLine("쉬운 던전을 실패하였습니다.");
+                Console.WriteLine();
+
+                isWin = false;
+            }
+            Console.WriteLine("[탐험 결과]");
+            Reward(isWin, 5);
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, 0);
+
+            switch (selectMenu)
+            {
+                // 나가기
+                case 0:
+                    PrintMenu();
+                    break;
+            }
+        }
+
+        // 4-2. 일반 던전입장 메뉴 활성화
+        static void EnterNormalDungeon()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            // 던전 클리어 여부 확인
+            bool isWin = false;
+
+            // 숫자 랜덤 생성
+            Random random = new Random();
+            int rand = random.Next(1, 10);
+
+            // 유저의 방어력이 권장 방어력보다 높을 때 + 작지만 60%의 확률로 이겼을 때
+            if (user.defense + user.addDefense >= 11 || rand > 4)
+            {
+                Console.WriteLine("던전 클리어");
+                Console.WriteLine("축하합니다!");
+                Console.WriteLine("일반 던전을 클리어 하였습니다.");
+                Console.WriteLine();
+
+                isWin = true;
+            }
+            // 유저의 방어력이 권장 방어력보다 작을 때, 40%의 확률로 던전 실패
+            else
+            {
+                Console.WriteLine("던전 실패!");
+                Console.WriteLine("일반 던전을 실패하였습니다.");
+                Console.WriteLine();
+
+                isWin = false;
+            }
+            Console.WriteLine("[탐험 결과]");
+            Reward(isWin, 11);
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, 0);
+
+            switch (selectMenu)
+            {
+                // 나가기
+                case 0:
+                    PrintMenu();
+                    break;
+            }
+        }
+
+        // 4-3. 어려운 던전입장 메뉴 활성화
+        static void EnterHardDungeon()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            // 던전 클리어 여부 확인
+            bool isWin = false;
+
+            // 숫자 랜덤 생성
+            Random random = new Random();
+            int rand = random.Next(1, 10);
+
+            // 유저의 방어력이 권장 방어력보다 높을 때 + 작지만 60%의 확률로 이겼을 때
+            if (user.defense + user.addDefense >= 17 || rand > 4)
+            {
+                Console.WriteLine("던전 클리어");
+                Console.WriteLine("축하합니다!");
+                Console.WriteLine("어려운 던전을 클리어 하였습니다.");
+                Console.WriteLine();
+
+                isWin = true;
+            }
+            // 유저의 방어력이 권장 방어력보다 작을 때, 40%의 확률로 던전 실패
+            else
+            {
+                Console.WriteLine("던전 실패!");
+                Console.WriteLine("어려운 던전을 실패하였습니다.");
+                Console.WriteLine();
+
+                isWin = false;
+            }
+            Console.WriteLine("[탐험 결과]");
+            Reward(isWin, 17);
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, 0);
+
+            switch (selectMenu)
+            {
+                // 나가기
+                case 0:
+                    PrintMenu();
+                    break;
+            }
+        }
+
+        // 보상 획득
+        static void Reward(bool isWin, int mission)
+        {
+            // 체력 감소
+            int decreaseHP = 0;
+            // 보상
+            int reward = 0;
+            // 숫자 랜덤 생성
+            Random random = new Random();
+
+            // 던전 실패했을 때
+            if (isWin == false)
+            {
+                // 체력 감소
+                decreaseHP = (int)(user.health * 0.5f);
+            }
+            // 던전 클리어했을 때
+            else
+            {
+                // 체력 감소
+                decreaseHP = random.Next(20 - (user.defense - mission), 35 - (user.defense - mission));
+
+                // reward = 기본 클리어 보상 + 추가 보상
+                switch (mission)
+                {
+                    case 5:
+                        reward = 1000 + (int)(1000 * 0.01f * user.power * random.Next(1, 2));
+                        break;
+                    case 11:
+                        reward = 1700 + (int)(1700 * 0.01f * user.power * random.Next(1, 2));
+                        break;
+                    case 17:
+                        reward = 2500 + (int)(2500 * 0.01f * user.power * random.Next(1, 2));
+                        break;
+                }
+            }
+
+            Console.WriteLine($"체력 {user.health} -> {user.health -= decreaseHP}");
+            Console.WriteLine($"Gold {user.gold} G -> {user.gold += reward} G");
+        }
+        #endregion // 메뉴 - 던전입장
+
+        #region 메뉴 - 휴식하기
+        // 5. [메뉴] 휴식하기
+        static void ShowRestArea()
+        {
+            // 화면 초기화
+            Console.Clear();
+
+            Console.WriteLine("휴식하기");
+            Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {user.gold} G");
+            Console.WriteLine();
+            Console.WriteLine("1. 휴식하기");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            // 메뉴 선택 확인
+            int selectMenu = CheckNum(0, 1);
+
+            switch (selectMenu)
+            {
+                // 나가기
+                case 0:
+                    PrintMenu();
+                    break;
+
+                // 휴식하기
+                case 1:
+                    TakeRest();
+                    break;
+            }
+        }
+
+        // 5-1. 휴식하기 메뉴 활성화
+        static void TakeRest()
+        {
+            // 보유 금액이 충분하다면
+            if (user.gold >= 500)
+            {
+                Console.WriteLine("휴식을 완료했습니다.");
+
+                user.gold -= 500;
+                user.health = 100;
+            }
+            // 보유 금액이 부족하다면
+            else
+            {
+                Console.WriteLine("Gold가 부족합니다.");
+            }
+
+            Alarm();
+        }
+
+        // 메뉴 선택 확인 메세지
+        static void Alarm()
+        {
+            // 확인 메세지
+            Console.WriteLine();
+            Console.WriteLine("되돌아가시려면 0을 누르세요.");
+            Console.Write(">> ");
+            int checkError = CheckNum(0, 0);
+            PrintMenu();
+        }
+        #endregion //메뉴 - 휴식하기
         #endregion // 메서드
     }
 }
