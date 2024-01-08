@@ -10,17 +10,19 @@ namespace DungeonTexetGame
         public string name;
         public string job;
         public int lv;
-        public int power;
+        public float power;
         public int defense;
         public int health;
         public int gold;
+
+        public int exp = 0;
 
         // 유저 추가공격력, 추가방어력
         public int addPower;
         public int addDefense;
 
         // User 생성자
-        public CUser(string newName, string newjob, int newLv, int newPower, int newDefense, int newHealth, int newGold)
+        public CUser(string newName, string newjob, int newLv, float newPower, int newDefense, int newHealth, int newGold)
         {
             this.name = newName;
             this.job = newjob;
@@ -974,6 +976,16 @@ namespace DungeonTexetGame
                     case 17:
                         reward = 2500 + (int)(2500 * 0.01f * user.power * random.Next(1, 2));
                         break;
+                }
+
+                // 레벨업
+                user.exp++;
+                if (user.exp == user.lv)
+                {
+                    user.lv++;
+                    user.exp = 0;
+                    user.power += 0.5f;
+                    user.defense += 1;
                 }
             }
 
